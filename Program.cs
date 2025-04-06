@@ -1,9 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using store_api.Src.Data;
+using store_api.Src.Helpers;
+using store_api.Src.Interfaces;
+using store_api.Src.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("Data Source=store.db"));
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 
 var app = builder.Build();
 
