@@ -7,11 +7,14 @@ using store_api.Src.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("Data Source=store.db"));
-
+builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
+
+app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
