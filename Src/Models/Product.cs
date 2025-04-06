@@ -5,7 +5,7 @@ namespace store_api.Src.Models
     public class Product
     {
         [Key]
-        public required int Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 3)]
