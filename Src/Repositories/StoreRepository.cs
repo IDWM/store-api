@@ -1,4 +1,6 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using store_api.Src.Data;
 using store_api.Src.DTOs.Request;
 using store_api.Src.DTOs.Response;
@@ -20,6 +22,14 @@ namespace store_api.Src.Repositories
             await _dataContext.SaveChangesAsync();
 
             return _mapper.Map<StoreDto>(store);
+        }
+
+        public async Task<IEnumerable<StoreDto>> GetStoresAsync()
+        {
+            return await _dataContext
+                .Stores.Include(x => x.Products)
+                .ProjectTo<StoreDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
     }
 }

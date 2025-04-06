@@ -9,11 +9,9 @@ namespace store_api.Src.Helpers
     {
         public AutoMapperProfiles()
         {
-            // Map from CreateStoreDto to Store
             CreateMap<CreateStoreDto, Store>();
-
-            // Map from Store to StoreDto
             CreateMap<Store, StoreDto>();
+            CreateMap<Product, ProductDto>();
         }
     }
 }
