@@ -14,6 +14,7 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<DataContext>();
         await context.Database.MigrateAsync();
+        await Seeder.SeedData(context);
     }
     catch (Exception ex)
     {
