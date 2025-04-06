@@ -9,18 +9,16 @@ namespace store_api.Src.Controllers
         private readonly IStoreRepository _storeRepository = storeRepository;
 
         [HttpPost]
-        public IActionResult CreateStore([FromBody] CreateStoreDto createStoreDto)
+        public async Task<IActionResult> CreateStore([FromBody] CreateStoreDto createStoreDto)
         {
-            var createdStore = _storeRepository.CreateStoreAsync(createStoreDto);
-
+            var createdStore = await _storeRepository.CreateStoreAsync(createStoreDto);
             return StatusCode(201, createdStore);
         }
 
         [HttpGet]
-        public IActionResult GetStores()
+        public async Task<IActionResult> GetStores()
         {
-            var stores = _storeRepository.GetStoresAsync();
-
+            var stores = await _storeRepository.GetStoresAsync();
             return Ok(stores);
         }
     }
