@@ -12,6 +12,9 @@ namespace store_api.Src.Helpers
             CreateMap<CreateStoreDto, Store>();
             CreateMap<Store, StoreDto>();
             CreateMap<Product, ProductDto>();
+            CreateMap<CreateProductDto, Product>()
+                .ForMember(dest => dest.Store, opt => opt.Ignore())
+                .ForMember(dest => dest.StoreId, opt => opt.MapFrom(src => src.StoreId));
         }
     }
 }
