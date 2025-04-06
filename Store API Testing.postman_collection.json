@@ -1,0 +1,258 @@
+{
+	"info": {
+		"_postman_id": "ce3a7302-08db-41b0-b4b1-2260223b878c",
+		"name": "Store API Testing",
+		"description": "Collection for testing the Store API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25678350"
+	},
+	"item": [
+		{
+			"name": "1. Create Store",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 201",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Test 2: Response is JSON",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"// Test 3: Store has been created properly",
+							"pm.test(\"Store has been created with correct data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.eql(\"Test Store\");",
+							"    pm.expect(jsonData.city).to.eql(\"Test City\");",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"});",
+							"",
+							"// Store the newly created store ID for subsequent requests",
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"storeId\", jsonData.id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test Store\",\n    \"city\": \"Test City\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/store",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"store"
+					]
+				},
+				"description": "Creates a new store"
+			},
+			"response": []
+		},
+		{
+			"name": "2. Get All Stores",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test 2: Response is JSON",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"// Test 3: Response is an array",
+							"pm.test(\"Response is an array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"",
+							"// Test 4: The newly created store exists in the response",
+							"pm.test(\"Newly created store exists in the list\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var storeId = pm.collectionVariables.get(\"storeId\");",
+							"    var found = jsonData.some(function(store) {",
+							"        return store.id === storeId;",
+							"    });",
+							"    pm.expect(found).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/store",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"store"
+					]
+				},
+				"description": "Get all stores"
+			},
+			"response": []
+		},
+		{
+			"name": "3. Create Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 201",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Test 2: Response is JSON",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"// Test 3: Product has been created properly",
+							"pm.test(\"Product has been created with correct data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.name).to.eql(\"Test Product\");",
+							"    pm.expect(jsonData.price).to.eql(100);",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"});",
+							"",
+							"// Store the newly created product ID for subsequent requests",
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"productId\", jsonData.id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Test Product\",\n    \"price\": 100,\n    \"storeId\": {{storeId}}\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product"
+					]
+				},
+				"description": "Creates a new product in the previously created store"
+			},
+			"response": []
+		},
+		{
+			"name": "4. Get Product by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Test 1: Status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Test 2: Response is JSON",
+							"pm.test(\"Response is JSON\", function () {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							"// Test 3: Correct product returned",
+							"pm.test(\"Correct product is returned\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var productId = pm.collectionVariables.get(\"productId\");",
+							"    pm.expect(jsonData.id).to.eql(productId);",
+							"    pm.expect(jsonData.name).to.eql(\"Test Product\");",
+							"    pm.expect(jsonData.price).to.eql(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/product/{{productId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"product",
+						"{{productId}}"
+					]
+				},
+				"description": "Get the product created in the previous request"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000/api",
+			"type": "string"
+		},
+		{
+			"key": "storeId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "productId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
